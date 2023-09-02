@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  dev:
+    container_name: TODO
+    working_dir: /work
+    build:
+      context: .
+    tty: true
+    volumes:
+      - type: bind
+        source: .
+        target: /work
