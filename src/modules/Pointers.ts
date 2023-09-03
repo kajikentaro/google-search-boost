@@ -4,11 +4,14 @@ const REMOVABLE_TAG_SELECTOR = `.${REMOVABLE_TAG}`;
 export class PointerController {
   private targetList: HTMLElement[];
   private nowIdx = 0;
+  private isEnable = true;
 
   constructor(targetList: HTMLElement[]) {
     this.targetList = targetList;
     if (targetList.length === 0) {
-      throw new Error("targetList is empty");
+      console.error("targetList is empty");
+      this.isEnable = false;
+      return;
     }
     this.insertArrow();
     this.focusOnLink(true);
@@ -32,6 +35,7 @@ export class PointerController {
   }
 
   public up() {
+    if (!this.isEnable) return;
     this.nowIdx = (this.nowIdx - 1 + this.targetList.length) % this.targetList.length;
     this.removePointer();
     this.insertArrow();
@@ -39,6 +43,7 @@ export class PointerController {
   }
 
   public down() {
+    if (!this.isEnable) return;
     this.nowIdx = (this.nowIdx + 1) % this.targetList.length;
     this.removePointer();
     this.insertArrow();
