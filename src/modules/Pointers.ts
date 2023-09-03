@@ -36,7 +36,6 @@ export class PointerController {
     this.removePointer();
     this.insertArrow();
     this.focusOnLink();
-    this.scroll();
   }
 
   public down() {
@@ -44,30 +43,6 @@ export class PointerController {
     this.removePointer();
     this.insertArrow();
     this.focusOnLink();
-    this.scroll();
-  }
-
-  private scroll() {
-    const target = this.targetList[this.nowIdx];
-
-    const HEADER_MARGIN = 100;
-    const FOOTER_MARGIN = 100;
-    function isOutOfViewport(target: HTMLElement) {
-      const windowHeight = window.innerHeight;
-      const shouldScrollUp = target.getBoundingClientRect().top < HEADER_MARGIN;
-      const shouldScrollDown = target.getBoundingClientRect().bottom > windowHeight - FOOTER_MARGIN;
-      return shouldScrollUp || shouldScrollDown;
-    }
-
-    if (!isOutOfViewport(target)) {
-      return;
-    }
-
-    const pxFromView = target.getBoundingClientRect().top;
-    const pxFromWindow = pxFromView + window.scrollY;
-    const pxWithHeader = pxFromWindow - HEADER_MARGIN;
-
-    window.scroll({ top: pxWithHeader, behavior: "smooth" });
   }
 
   private focusOnLink(preventScroll: boolean = false) {
