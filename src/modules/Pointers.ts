@@ -1,3 +1,5 @@
+import { max, min } from "./MinMax";
+
 const REMOVABLE_TAG = "REMOVABLE_ELEMENT_FOR_EXTENSION";
 const REMOVABLE_TAG_SELECTOR = `.${REMOVABLE_TAG}`;
 
@@ -36,7 +38,7 @@ export class PointerController {
 
   public up() {
     if (!this.isEnable) return;
-    this.nowIdx = (this.nowIdx - 1 + this.targetList.length) % this.targetList.length;
+    this.nowIdx = max(this.nowIdx - 1, 0);
     this.removePointer();
     this.insertArrow();
     this.focusOnLink();
@@ -44,7 +46,7 @@ export class PointerController {
 
   public down() {
     if (!this.isEnable) return;
-    this.nowIdx = (this.nowIdx + 1) % this.targetList.length;
+    this.nowIdx = min(this.nowIdx + 1, this.targetList.length - 1);
     this.removePointer();
     this.insertArrow();
     this.focusOnLink();
