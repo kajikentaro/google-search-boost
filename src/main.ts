@@ -21,29 +21,38 @@ function getVisible(elements: HTMLElement[]): HTMLElement[] {
 }
 
 function removeSidebarElement(elements: HTMLElement[]): HTMLElement[] {
+  // TODO: adjust
+  function getCharacter(e: HTMLElement) {
+    return window.getComputedStyle(e).color;
+  }
   if (elements.length === 0) {
     return [];
   }
-  const mainClassName = elements[0].classList[0];
+  const character = getCharacter(elements[0]);
 
+  // remove elements that don't have same character as the 1st element
   const res: HTMLElement[] = [];
   for (const e of elements) {
-    if (e.classList[0] === mainClassName) {
+    if (getCharacter(e) === character) {
       res.push(e);
     }
   }
-  // return elements with the same className as the first element
   return res;
 }
 
 function main() {
-  const allH3NodeList = document.querySelectorAll("h3");
+  const allH3NodeList = document.querySelectorAll("#search h3");
 
   // covert to array list
   const allH3Array: HTMLElement[] = [];
-  allH3NodeList.forEach((v) => allH3Array.push(v));
+  allH3NodeList.forEach((v) => {
+    if (v instanceof HTMLElement) {
+      allH3Array.push(v);
+    }
+  });
 
   const visibleH3 = getVisible(allH3Array);
+  console.log(visibleH3);
   const mainContentH3 = removeSidebarElement(visibleH3);
 
   const pointer = new PointerController(mainContentH3);
