@@ -1,4 +1,4 @@
-# Chrome Extension Template
+# Google Search Boost
 
 ## Usage
 
