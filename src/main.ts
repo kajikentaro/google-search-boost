@@ -49,6 +49,13 @@ function main() {
   const pointer = new PointerController(mainContentH3);
 
   window.addEventListener("keypress", (v) => {
+    if (!(v.target instanceof HTMLElement)) {
+      throw new Error("v.target is not HTMLElement");
+    }
+    const ignoreType = ["TEXTAREA"];
+    if (ignoreType.includes(v.target.tagName)) {
+      return;
+    }
     if (v.key === "k") {
       pointer.up();
     }
