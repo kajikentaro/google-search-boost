@@ -52,7 +52,6 @@ function main() {
   });
 
   const visibleH3 = getVisible(allH3Array);
-  console.log(visibleH3);
   const mainContentH3 = removeSidebarElement(visibleH3);
 
   const pointer = new PointerController(mainContentH3);
