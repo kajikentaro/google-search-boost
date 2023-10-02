@@ -1,58 +1,30 @@
+import { shouldBeSameFontColorAs1st, shouldBeVisibleElements } from "modules/Filters";
 import { PointerController } from "modules/Pointers";
 
-function getVisible(elements: HTMLElement[]): HTMLElement[] {
-  function isHidden(element: HTMLElement): boolean {
-    if (window.getComputedStyle(element).display === "none") {
-      return true;
+function getH3Elements() {
+  const h3Elements: HTMLElement[] = [];
+  const queryRes = document.querySelectorAll("#search h3");
+  // covert to array list
+  queryRes.forEach((v) => {
+    if (v instanceof HTMLElement) {
+      h3Elements.push(v);
     }
-    if (element === document.body) {
-      return false;
-    }
-    return isHidden(element.parentElement);
-  }
-
-  const visibleElements: HTMLElement[] = [];
-  for (const e of elements) {
-    if (!isHidden(e)) {
-      visibleElements.push(e);
-    }
-  }
-  return visibleElements;
+  });
+  return h3Elements;
 }
 
-function removeSidebarElement(elements: HTMLElement[]): HTMLElement[] {
-  // TODO: adjust
-  function getCharacter(e: HTMLElement) {
-    return window.getComputedStyle(e).color;
-  }
-  if (elements.length === 0) {
-    return [];
-  }
-  const character = getCharacter(elements[0]);
-
-  // remove elements that don't have same character as the 1st element
-  const res: HTMLElement[] = [];
-  for (const e of elements) {
-    if (getCharacter(e) === character) {
-      res.push(e);
-    }
+function filterElements(all: HTMLElement[]) {
+  const filters = [shouldBeVisibleElements, shouldBeSameFontColorAs1st];
+  let res = all;
+  for (const filter of filters) {
+    res = filter(res);
   }
   return res;
 }
 
 function main() {
-  const allH3NodeList = document.querySelectorAll("#search h3");
-
-  // covert to array list
-  const allH3Array: HTMLElement[] = [];
-  allH3NodeList.forEach((v) => {
-    if (v instanceof HTMLElement) {
-      allH3Array.push(v);
-    }
-  });
-
-  const visibleH3 = getVisible(allH3Array);
-  const mainContentH3 = removeSidebarElement(visibleH3);
+  const h3Elements = getH3Elements();
+  const mainContentH3 = filterElements(h3Elements);
 
   const pointer = new PointerController(mainContentH3);
 
