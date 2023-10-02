@@ -36,3 +36,15 @@ export function shouldBeVisibleElements(elements: HTMLElement[]): HTMLElement[] 
   }
   return visibleElements;
 }
+
+export function shouldHaveLink(elements: HTMLElement[]) {
+  return elements.filter((now) => {
+    while (now !== document.body) {
+      if (now.tagName === "A") {
+        return true;
+      }
+      now = now.parentElement;
+    }
+    return false;
+  });
+}

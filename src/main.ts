@@ -1,4 +1,4 @@
-import { shouldBeSameFontColorAs1st, shouldBeVisibleElements } from "modules/Filters";
+import { shouldBeSameFontColorAs1st, shouldBeVisibleElements, shouldHaveLink } from "modules/Filters";
 import { PointerController } from "modules/Pointers";
 
 function getH3Elements() {
@@ -14,7 +14,7 @@ function getH3Elements() {
 }
 
 function filterElements(all: HTMLElement[]) {
-  const filters = [shouldBeVisibleElements, shouldBeSameFontColorAs1st];
+  const filters = [shouldBeVisibleElements, shouldHaveLink, shouldBeSameFontColorAs1st];
   let res = all;
   for (const filter of filters) {
     res = filter(res);
