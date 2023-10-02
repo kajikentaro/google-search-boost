@@ -1,3 +1,4 @@
+import { isInViewport } from "./IsInViewport";
 import { max, min } from "./MinMax";
 
 const REMOVABLE_TAG = "REMOVABLE_ELEMENT_FOR_EXTENSION";
@@ -8,8 +9,9 @@ export class PointerController {
   private nowIdx = 0;
   private isEnable = true;
 
-  constructor(targetList: HTMLElement[]) {
+  constructor(targetList: HTMLElement[], focusedIdx: number = 0) {
     this.targetList = targetList;
+    this.nowIdx = focusedIdx;
     if (targetList.length === 0) {
       console.error("targetList is empty");
       this.isEnable = false;
@@ -17,6 +19,7 @@ export class PointerController {
     }
     this.insertArrow();
     this.focusOnLink(true);
+    this.scrollToViewport();
   }
 
   private async insertArrow() {
@@ -36,6 +39,14 @@ export class PointerController {
     });
   }
 
+  public getIdx() {
+    return this.nowIdx;
+  }
+
+  public destroy() {
+    this.removePointer();
+  }
+
   public up() {
     if (!this.isEnable) return;
     this.nowIdx = max(this.nowIdx - 1, 0);
@@ -50,6 +61,16 @@ export class PointerController {
     this.removePointer();
     this.insertArrow();
     this.focusOnLink();
+  }
+
+  private scrollToViewport() {
+    const target = this.targetList[this.nowIdx];
+    if (isInViewport(target)) return;
+    if (this.nowIdx === 0) {
+      target.scrollIntoView({ behavior: "smooth", block: "end", inline: "end" });
+    } else {
+      target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    }
   }
 
   private focusOnLink(preventScroll: boolean = false) {

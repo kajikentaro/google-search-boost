@@ -3,7 +3,7 @@ import { PointerController } from "modules/Pointers";
 
 function getH3Elements() {
   const h3Elements: HTMLElement[] = [];
-  const queryRes = document.querySelectorAll("#search h3");
+  const queryRes = document.querySelectorAll("#center_col h3");
   // covert to array list
   queryRes.forEach((v) => {
     if (v instanceof HTMLElement) {
@@ -23,10 +23,26 @@ function filterElements(all: HTMLElement[]) {
 }
 
 function main() {
-  const h3Elements = getH3Elements();
-  const mainContentH3 = filterElements(h3Elements);
+  let mainContentH3Length = -1;
+  let pointer: PointerController;
+  setInterval(() => {
+    const h3Elements = getH3Elements();
+    const mainContentH3 = filterElements(h3Elements);
 
-  const pointer = new PointerController(mainContentH3);
+    if (mainContentH3Length === mainContentH3.length) return;
+    if (mainContentH3Length === -1) {
+      // first render
+      mainContentH3Length = mainContentH3.length;
+      pointer = new PointerController(mainContentH3);
+      return;
+    }
+
+    // when updated view (when 'see more' was clicked)
+    mainContentH3Length = mainContentH3.length;
+    const focusedIdx = pointer.getIdx();
+    pointer.destroy();
+    pointer = new PointerController(mainContentH3, focusedIdx);
+  }, 500);
 
   window.addEventListener("keypress", (v) => {
     if (!(v.target instanceof HTMLElement)) {
