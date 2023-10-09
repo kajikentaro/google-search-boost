@@ -80,20 +80,28 @@ function main() {
         return;
       }
     }
-    v.preventDefault();
+    let didAction = false;
     if (v.key === keyboardEventMapper.up) {
       pointer.up();
+      didAction = true;
     }
     if (v.key === keyboardEventMapper.down) {
       pointer.down();
+      didAction = true;
     }
     if (v.key === keyboardEventMapper.right) {
       // go to next page
       movePage(10);
+      didAction = true;
     }
     if (v.key === keyboardEventMapper.left) {
       // go to previous page
       movePage(-10);
+      didAction = true;
+    }
+
+    if (didAction) {
+      v.preventDefault();
     }
   });
 }
