@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Google Search Boost",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "vim-like keyboard shortcuts for search page",
   "icons": {
     "16": "icons/16.png",
