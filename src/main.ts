@@ -29,6 +29,9 @@ let keyboardEventMapper = KEYBOARD_EVENT_MAPPER.jk;
 
 async function getKeybindings() {
   const res = await getStringFromStorage("keybindings");
+  if (!res) {
+    return;
+  }
   if (!PREFERENCE_KEY_BINDINGS.includes(res)) {
     throw new Error(`unknown value was found in storage: ${res}`);
   }
