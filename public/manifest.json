@@ -9,11 +9,16 @@
     "48": "icons/48.png",
     "128": "icons/128.png"
   },
+  "action": {
+    "default_title": "preference",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["https://www.google.com/search?*"],
       "js": ["main.js"],
-      "css": ["style.css"]
+      "css": ["style-main.css"]
     }
   ],
   "web_accessible_resources": [

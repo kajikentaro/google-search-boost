@@ -1,5 +1,5 @@
-import { isInViewport } from "./IsInViewport";
-import { max, min } from "./MinMax";
+import { isInViewport } from "./is-in-viewport";
+import { max, min } from "./min-max";
 
 const REMOVABLE_TAG = "REMOVABLE_ELEMENT_FOR_EXTENSION";
 const REMOVABLE_TAG_SELECTOR = `.${REMOVABLE_TAG}`;

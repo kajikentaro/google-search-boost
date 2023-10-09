@@ -1,0 +1,24 @@
+body {
+  max-width: 800px;
+  width: 300px;
+  margin: 0;
+  font-family: "Hiragino Sans W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+.radio-group {
+  font-size: 1.2rem;
+  list-style: none;
+
+  li {
+    display: flex;
+    accent-color: green;
+  }
+}
