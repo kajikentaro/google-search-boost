@@ -1,7 +1,6 @@
-import { KEYBOARD_EVENT_MAPPER, PREFERENCE_KEY_BINDINGS, PreferenceKeyBindings } from "modules/const";
 import { shouldBeSameFontColorAs1st, shouldBeVisibleElements, shouldHaveLink } from "modules/filters";
+import { KeyEventMapper } from "modules/keyEventMapper";
 import { PointerController } from "modules/pointers";
-import { getStringFromStorage } from "modules/storage";
 
 function getH3Elements() {
   const h3Elements: HTMLElement[] = [];
@@ -24,25 +23,7 @@ function filterElements(all: HTMLElement[]) {
   return res;
 }
 
-let withCtrlKey = false;
-let keyboardEventMapper = KEYBOARD_EVENT_MAPPER.jk;
-
-async function getKeybindings() {
-  const res = await getStringFromStorage("keybindings");
-  if (!res) {
-    return;
-  }
-  if (!PREFERENCE_KEY_BINDINGS.includes(res)) {
-    throw new Error(`unknown value was found in storage: ${res}`);
-  }
-  const keyBindings = res as PreferenceKeyBindings;
-  if (keyBindings === "ctrlJk" || keyBindings === "ctrlUpDown") {
-    withCtrlKey = true;
-  }
-  keyboardEventMapper = KEYBOARD_EVENT_MAPPER[keyBindings];
-}
-
-function main() {
+function main(keyEventMapper: KeyEventMapper) {
   let mainContentH3Length = -1;
   let pointer: PointerController;
   setInterval(() => {
@@ -64,8 +45,6 @@ function main() {
     pointer = new PointerController(mainContentH3, focusedIdx);
   }, 500);
 
-  getKeybindings();
-
   window.addEventListener("keydown", (v) => {
     if (!(v.target instanceof HTMLElement)) {
       throw new Error("v.target is not HTMLElement");
@@ -74,33 +53,30 @@ function main() {
     if (ignoreType.includes(v.target.tagName)) {
       return;
     }
-    if (withCtrlKey) {
-      if (!(v.metaKey || v.ctrlKey)) {
-        return;
-      }
-    } else {
-      if (v.metaKey || v.ctrlKey) {
-        return;
-      }
-    }
+
+    const isWithCtrlKey = v.metaKey || v.ctrlKey;
+    const event = keyEventMapper.keyToEvent(v.key, isWithCtrlKey);
+
     let didAction = false;
-    if (v.key === keyboardEventMapper.up) {
-      pointer.up();
-      didAction = true;
-    }
-    if (v.key === keyboardEventMapper.down) {
-      pointer.down();
-      didAction = true;
-    }
-    if (v.key === keyboardEventMapper.right) {
-      // go to next page
-      movePage(10);
-      didAction = true;
-    }
-    if (v.key === keyboardEventMapper.left) {
-      // go to previous page
-      movePage(-10);
-      didAction = true;
+    switch (event) {
+      case "up":
+        pointer.up();
+        didAction = true;
+        break;
+      case "down":
+        pointer.down();
+        didAction = true;
+        break;
+      case "right":
+        movePage(10);
+        didAction = true;
+        break;
+      case "left":
+        movePage(-10);
+        didAction = true;
+        break;
+      default:
+        ((neverAssert: never) => {})(event);
     }
 
     if (didAction) {
@@ -118,4 +94,5 @@ function movePage(difference: number) {
   document.location.href = url.toString();
 }
 
-main();
+// dependency injection
+main(new KeyEventMapper());

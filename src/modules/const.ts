@@ -1,33 +1,7 @@
-export type StorageKeys = "keybindings";
+export type StorageKeys = "keybindings" | "keybindings-pages";
 
-const TMP_PREFERENCE_KEY_BINDINGS = ["jk", "upDown", "ctrlUpDown", "ctrlJk"] as const;
-export type PreferenceKeyBindings = (typeof TMP_PREFERENCE_KEY_BINDINGS)[number];
-export const PREFERENCE_KEY_BINDINGS: string[] = ["jk", "upDown", "ctrlUpDown", "ctrlJk"] satisfies typeof TMP_PREFERENCE_KEY_BINDINGS;
+export const KEY_SETTING_CURSOR = ["jk", "upDown", "ctrlUpDown", "ctrlJk"] as const;
+export type KeyCursor = (typeof KEY_SETTING_CURSOR)[number];
 
-type KeyboardEventMapper = Record<PreferenceKeyBindings, Record<"up" | "down" | "right" | "left", string>>;
-export const KEYBOARD_EVENT_MAPPER: KeyboardEventMapper = {
-  jk: {
-    up: "k",
-    down: "j",
-    right: "l",
-    left: "h",
-  },
-  upDown: {
-    up: "ArrowUp",
-    down: "ArrowDown",
-    right: "ArrowRight",
-    left: "ArrowLeft",
-  },
-  ctrlUpDown: {
-    up: "ArrowUp",
-    down: "ArrowDown",
-    right: "ArrowRight",
-    left: "ArrowLeft",
-  },
-  ctrlJk: {
-    up: "k",
-    down: "j",
-    right: "l",
-    left: "h",
-  },
-};
+export const KEY_SETTING_PAGES = ["none", "hl", "leftRight", "ctrlHl", "ctrlLeftRight"] as const;
+export type KeyPages = (typeof KEY_SETTING_PAGES)[number];
