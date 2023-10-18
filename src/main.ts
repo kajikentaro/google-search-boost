@@ -23,6 +23,13 @@ function filterElements(all: HTMLElement[]) {
   return res;
 }
 
+function focusSearchTextbox() {
+  const textbox = document.querySelector("#searchform textarea") as HTMLTextAreaElement;
+  const length = textbox.textLength;
+  textbox.focus();
+  textbox.setSelectionRange(length, length);
+}
+
 function main(keyEventMapper: KeyEventMapper) {
   let mainContentH3Length = -1;
   let pointer: PointerController;
@@ -73,6 +80,10 @@ function main(keyEventMapper: KeyEventMapper) {
         break;
       case "left":
         movePage(-10);
+        didAction = true;
+        break;
+      case "focus-search":
+        focusSearchTextbox();
         didAction = true;
         break;
       default:

@@ -1,11 +1,13 @@
-import { KEY_SETTING_CURSOR, KEY_SETTING_PAGES, KeyCursor, KeyPages } from "./const";
+import { KEY_SETTING_CURSOR, KEY_SETTING_FOCUS_SEARCH, KEY_SETTING_PAGES, KeyCursor, KeyFocusSearch, KeyPages } from "./const";
 import { getStringFromStorage } from "./storage";
 
-export type EventType = "up" | "down" | "right" | "left";
+export type EventType = "up" | "down" | "right" | "left" | "focus-search";
 
 export class KeyEventMapper {
   private settingCursor: KeyCursor = "jk";
   private settingPages: KeyPages = "hl";
+  private settingFocusSearch: KeyFocusSearch = "ctrlSlash";
+
   constructor() {
     this.readKeySettingsFromStorage();
   }
@@ -34,12 +36,25 @@ export class KeyEventMapper {
       }
       this.settingPages = key;
     }
+
+    {
+      const res = await getStringFromStorage("keybindings-focus-search");
+      if (!res) {
+        return;
+      }
+      const key = res as KeyFocusSearch;
+      if (!KEY_SETTING_FOCUS_SEARCH.includes(key)) {
+        throw new Error(`unknown value was found in storage: ${res}`);
+      }
+      this.settingFocusSearch = key;
+    }
   }
 
   public keyToEvent(key: string, withCtrl: boolean): EventType | undefined {
     const candidates = [
       SETTING_MAPPER_CURSOR.find((v) => v.savedKey === this.settingCursor),
       SETTING_MAPPER_PAGES.find((v) => v.savedKey === this.settingPages),
+      SETTING_MAPPER_FOCUS_SEARCH.find((v) => v.savedKey === this.settingFocusSearch),
     ].filter((v) => v);
 
     for (const v of candidates) {
@@ -130,6 +145,23 @@ const SETTING_MAPPER_PAGES: SettingMapper<KeyPages, "left" | "right">[] = [
     keyToEvent: {
       ArrowLeft: "left",
       ArrowRight: "right",
+    },
+    withCtrl: true,
+  },
+];
+
+const SETTING_MAPPER_FOCUS_SEARCH: SettingMapper<KeyFocusSearch, "focus-search">[] = [
+  {
+    savedKey: "slash",
+    keyToEvent: {
+      "/": "focus-search",
+    },
+    withCtrl: false,
+  },
+  {
+    savedKey: "ctrlSlash",
+    keyToEvent: {
+      "/": "focus-search",
     },
     withCtrl: true,
   },
