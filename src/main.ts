@@ -49,7 +49,7 @@ function main(keyEventMapper: KeyEventMapper) {
     mainContentH3Length = mainContentH3.length;
     const focusedIdx = pointer.getIdx();
     pointer.destroy();
-    pointer = new PointerController(mainContentH3, focusedIdx);
+    pointer = new PointerController(mainContentH3, focusedIdx, true);
   }, 500);
 
   window.addEventListener("keydown", (v) => {

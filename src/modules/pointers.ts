@@ -9,7 +9,7 @@ export class PointerController {
   private nowIdx = 0;
   private isEnable = true;
 
-  constructor(targetList: HTMLElement[], focusedIdx: number = 0) {
+  constructor(targetList: HTMLElement[], focusedIdx: number = 0, preventScroll: boolean = false) {
     this.targetList = targetList;
     this.nowIdx = focusedIdx;
     if (targetList.length === 0) {
@@ -19,7 +19,9 @@ export class PointerController {
     }
     this.insertArrow();
     this.focusOnLink(true);
-    this.scrollToViewport();
+    if (!preventScroll) {
+      this.scrollToViewport();
+    }
   }
 
   private async insertArrow() {
