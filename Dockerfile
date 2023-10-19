@@ -1,4 +1,4 @@
-FROM node:20.5.1-bullseye
+FROM node:18.18.2-bullseye
 
 # Dockerfile for development
 RUN apt-get update
